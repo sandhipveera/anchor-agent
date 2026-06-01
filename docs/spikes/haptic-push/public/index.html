@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <link rel="manifest" href="manifest.json" />
+  <title>Anchor Haptic Push Spike</title>
+  <style>
+    :root { color-scheme: dark; }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: #0a0a0a;
+      color: #f2f2f2;
+      font: 17px/1.5 -apple-system, system-ui, sans-serif;
+      padding: 20px max(20px, env(safe-area-inset-left)) 60px;
+    }
+    h1 { font-size: 20px; margin: 0 0 4px; }
+    p.sub { color: #9aa0a6; margin: 0 0 24px; }
+    .step { margin: 0 0 14px; }
+    .step b { display: block; margin-bottom: 8px; color: #cfd2d6; font-size: 14px; text-transform: uppercase; letter-spacing: .04em; }
+    button {
+      display: block; width: 100%; min-height: 56px; margin: 0 0 10px;
+      background: #1f2937; color: #f2f2f2; border: 1px solid #374151;
+      border-radius: 12px; font-size: 17px; padding: 14px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    button:active { background: #374151; }
+    button:disabled { opacity: .4; }
+    button.primary { background: #2563eb; border-color: #2563eb; }
+    pre {
+      background: #111317; border: 1px solid #2a2d33; border-radius: 10px;
+      padding: 12px; font-size: 12px; white-space: pre-wrap; word-break: break-all;
+      max-height: 220px; overflow: auto; color: #b7f5c2;
+    }
+    .log { color: #ffd9a0; }
+    .ok { color: #7ee787; }
+    .err { color: #ff7b72; }
+  </style>
+</head>
+<body>
+  <h1>Anchor — Haptic Push Spike</h1>
+  <p class="sub">Validates silent-by-default + haptic Web Push on this device. Run each step in order. Install to home screen, then test with the app backgrounded.</p>
+
+  <div class="step">
+    <b>0 · Environment</b>
+    <pre id="env">checking…</pre>
+  </div>
+
+  <div class="step">
+    <b>1 · Foreground vibration (Vibration API)</b>
+    <button id="btnVibrate">Vibrate now (page in foreground)</button>
+  </div>
+
+  <div class="step">
+    <b>2 · Service worker + notification permission</b>
+    <button id="btnRegister">Register service worker</button>
+    <button id="btnPermission">Request notification permission</button>
+  </div>
+
+  <div class="step">
+    <b>3 · Local notification (no push server)</b>
+    <button id="btnLocalSilent">Show SILENT + vibrate notification</button>
+    <button id="btnLocalSound">Show notification WITH sound (control)</button>
+  </div>
+
+  <div class="step">
+    <b>4 · Real background push</b>
+    <button id="btnSubscribe" class="primary">Subscribe to push (paste VAPID public key first)</button>
+    <input id="vapidKey" placeholder="VAPID public key (base64url)" style="width:100%;min-height:48px;margin:0 0 10px;background:#111317;color:#f2f2f2;border:1px solid #2a2d33;border-radius:10px;padding:12px;font-size:14px;" />
+    <button id="btnCopySub">Copy subscription JSON (send to laptop)</button>
+    <pre id="sub">no subscription yet</pre>
+  </div>
+
+  <div class="step">
+    <b>Log</b>
+    <pre id="log"></pre>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const logEl = $('log');
+    function log(msg, cls) {
+      const t = new Date().toISOString().slice(11, 19);
+      const line = `[${t}] ${msg}`;
+      const span = document.createElement('span');
+      span.textContent = line + '\n';
+      if (cls) span.className = cls;
+      logEl.appendChild(span);
+      logEl.scrollTop = logEl.scrollHeight;
+    }
+
+    // 0 · environment
+    (function envCheck() {
+      const standalone = window.matchMedia('(display-mode: standalone)').matches;
+      const info = {
+        secureContext: window.isSecureContext,
+        serviceWorker: 'serviceWorker' in navigator,
+        pushManager: 'PushManager' in window,
+        notification: 'Notification' in window,
+        notificationPermission: ('Notification' in window) ? Notification.permission : 'n/a',
+        vibrate: 'vibrate' in navigator,
+        installedStandalone: standalone,
+        ua: navigator.userAgent,
+      };
+      $('env').textContent = JSON.stringify(info, null, 2);
+      if (!info.secureContext) log('NOT a secure context — push/SW will fail. Serve over HTTPS.', 'err');
+    })();
+
+    // 1 · foreground vibration
+    $('btnVibrate').onclick = () => {
+      if (!('vibrate' in navigator)) return log('navigator.vibrate not supported', 'err');
+      const ok = navigator.vibrate([200, 100, 200]);
+      log('navigator.vibrate([200,100,200]) returned ' + ok + ' — did you feel it?', ok ? 'ok' : 'err');
+    };
+
+    // 2 · register SW + permission
+    let swReg = null;
+    $('btnRegister').onclick = async () => {
+      try {
+        swReg = await navigator.serviceWorker.register('sw.js');
+        await navigator.serviceWorker.ready;
+        log('Service worker registered + ready.', 'ok');
+      } catch (e) { log('SW register failed: ' + e.message, 'err'); }
+    };
+    $('btnPermission').onclick = async () => {
+      const p = await Notification.requestPermission();
+      log('Notification permission: ' + p, p === 'granted' ? 'ok' : 'err');
+    };
+
+    // 3 · local notifications via SW
+    async function showLocal(opts, label) {
+      if (!swReg) { try { swReg = await navigator.serviceWorker.ready; } catch {} }
+      if (!swReg) return log('Register the service worker first.', 'err');
+      if (Notification.permission !== 'granted') return log('Grant notification permission first.', 'err');
+      await swReg.showNotification('Anchor spike — ' + label, opts);
+      log('Shown: ' + label + ' (silent=' + !!opts.silent + ', vibrate=' + JSON.stringify(opts.vibrate || null) + ')');
+    }
+    $('btnLocalSilent').onclick = () => showLocal(
+      { body: 'Should vibrate, make NO sound.', silent: true, vibrate: [200, 100, 200], requireInteraction: true, tag: 'spike-silent' },
+      'SILENT+vibrate'
+    );
+    $('btnLocalSound').onclick = () => showLocal(
+      { body: 'Control: may make sound per channel.', silent: false, vibrate: [300], requireInteraction: true, tag: 'spike-sound' },
+      'WITH-sound (control)'
+    );
+
+    // 4 · push subscription
+    function urlBase64ToUint8Array(base64String) {
+      const padding = '='.repeat((4 - (base64String.length % 4)) % 4);
+      const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/');
+      const raw = atob(base64);
+      const arr = new Uint8Array(raw.length);
+      for (let i = 0; i < raw.length; i++) arr[i] = raw.charCodeAt(i);
+      return arr;
+    }
+    let lastSub = null;
+    $('btnSubscribe').onclick = async () => {
+      const key = $('vapidKey').value.trim();
+      if (!key) return log('Paste the VAPID public key (from generate-vapid.js) first.', 'err');
+      if (!swReg) { try { swReg = await navigator.serviceWorker.ready; } catch {} }
+      if (!swReg) return log('Register the service worker first.', 'err');
+      try {
+        lastSub = await swReg.pushManager.subscribe({
+          userVisibleOnly: true,
+          applicationServerKey: urlBase64ToUint8Array(key),
+        });
+        $('sub').textContent = JSON.stringify(lastSub.toJSON(), null, 2);
+        log('Subscribed. Copy the JSON and send it to your laptop for send.js.', 'ok');
+      } catch (e) { log('Subscribe failed: ' + e.message, 'err'); }
+    };
+    $('btnCopySub').onclick = async () => {
+      if (!lastSub) return log('Subscribe first.', 'err');
+      try {
+        await navigator.clipboard.writeText(JSON.stringify(lastSub.toJSON()));
+        log('Subscription JSON copied to clipboard.', 'ok');
+      } catch (e) {
+        log('Clipboard blocked — long-press the JSON box to copy manually.', 'err');
+      }
+    };
+  </script>
+</body>
+</html>

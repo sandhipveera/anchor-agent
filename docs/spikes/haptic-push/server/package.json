@@ -1,0 +1,14 @@
+{
+  "name": "anchor-haptic-push-spike-server",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Minimal VAPID push sender to validate silent+haptic background Web Push.",
+  "type": "module",
+  "scripts": {
+    "vapid": "node generate-vapid.js",
+    "send": "node send.js"
+  },
+  "dependencies": {
+    "web-push": "^3.6.7"
+  }
+}
