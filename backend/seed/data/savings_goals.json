@@ -1,0 +1,23 @@
+[
+  {
+    "name": "New headphones",
+    "target_amount": 200.00,
+    "deadline": null,
+    "status": "active",
+    "deposits_total": 120.00
+  },
+  {
+    "name": "Emergency money",
+    "target_amount": 1000.00,
+    "deadline": null,
+    "status": "active",
+    "deposits_total": 340.00
+  },
+  {
+    "name": "Trip to see sibling",
+    "target_amount": 450.00,
+    "deadline": "2026-09-01",
+    "status": "active",
+    "deposits_total": 75.00
+  }
+]

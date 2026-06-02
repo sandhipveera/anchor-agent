@@ -1,0 +1,9 @@
+[
+  { "goal": "New headphones", "timestamp": "2026-05-04T18:00:00Z", "amount": 40.00, "note": "" },
+  { "goal": "New headphones", "timestamp": "2026-05-18T18:00:00Z", "amount": 40.00, "note": "" },
+  { "goal": "New headphones", "timestamp": "2026-05-30T18:00:00Z", "amount": 40.00, "note": "leftover from groceries" },
+  { "goal": "Emergency money", "timestamp": "2026-05-03T12:00:00Z", "amount": 100.00, "note": "" },
+  { "goal": "Emergency money", "timestamp": "2026-05-17T12:00:00Z", "amount": 120.00, "note": "" },
+  { "goal": "Emergency money", "timestamp": "2026-05-31T12:00:00Z", "amount": 120.00, "note": "" },
+  { "goal": "Trip to see sibling", "timestamp": "2026-05-20T15:00:00Z", "amount": 75.00, "note": "" }
+]

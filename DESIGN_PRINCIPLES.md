@@ -15,7 +15,7 @@ user, and he is in charge.
 
 ---
 
-## The 15 Immutable Principles
+## The Immutable Principles
 
 1. **He is the user. He is in charge.**
    Not parents, not caregivers, not the engineer. There is no caregiver
@@ -65,8 +65,8 @@ user, and he is in charge.
     imply judgment. Completing a task is its own outcome.
 
 11. **Honest about uncertainty.**
-    "I'm not sure if this job posting is legitimate — here's what looks off"
-    beats false confidence. The agent says when it doesn't know.
+    "I'm not sure if this message is a scam — here's what looks off" beats false
+    confidence. The agent says when it doesn't know.
 
 12. **Privacy is absolute.**
     All user data is scoped to his own cloud account, encrypted at rest. No
@@ -86,6 +86,49 @@ user, and he is in charge.
     Unless he explicitly turns it on. Do not suggest it. Do not "encourage" it.
     Do not include it in default recipes. The same applies to the blender: he has
     not used one and does not want to — it does not appear.
+
+### Money principles (16–23)
+
+The money-management capabilities add eight more constraints. They are as
+immutable as the first fifteen. See [The money boundary](#the-money-boundary) for
+why these exist as hard lines.
+
+16. **The agent never moves money.**
+    It never accesses bank accounts, never holds payment credentials, never
+    initiates a transfer or a payment. No exceptions. The agent records and
+    informs; the user acts, with his own hands, in his own apps.
+
+17. **No financial advice.**
+    No investment, credit, tax, or budgeting advice. Scam analysis is *fraud
+    protection*, not financial advice — it explains what looks deceptive, not what
+    he should do with his money.
+
+18. **No paternalism on spending.**
+    The agent never tells him what to buy, never asks "are you sure?", never
+    imposes friction or a cooling-off step. What he spends is his business.
+
+19. **Spending and savings data is his eyes only.**
+    Not the sibling, not parents, not any aggregated or shared view. The same
+    privacy wall as everything else (§1, §12), stated explicitly for money.
+
+20. **Scam verdicts are information, not action.**
+    The agent presents its analysis; he decides. Even on "very likely scam," the
+    agent does not block, does not contact anyone, does not notify anyone, does
+    not take any protective action on his behalf.
+
+21. **Spending categorization is suggestive and always overridable.**
+    The agent may suggest a category; he can override it with zero friction. No
+    "are you sure" on an override. His category wins, always, instantly.
+
+22. **Saving goals are user-owned.**
+    Edit, pause, or delete any goal at any time, with zero commentary on the
+    change. No "are you sure you want to give up?", no disappointment framing, no
+    record of abandoned goals.
+
+23. **Pattern surfacing is neutral.**
+    When the agent shows spending or savings data, it shows data — never
+    interpreted as "good" or "bad," never compared to other people or to past
+    periods as judgment, never framed as a problem. Totals, not verdicts.
 
 ---
 
@@ -130,6 +173,34 @@ what he types.
 
 ---
 
+## The money boundary
+
+The money-management capabilities (scam shield, bill awareness, spending log,
+saving goals) help him stay aware of his own money. They never touch it.
+
+**The agent is a notebook and a second pair of eyes — not a wallet, not a bank,
+not an advisor.** Concretely:
+
+- It **never** connects to a bank, payment processor, or card. There is no
+  Plaid/Yodlee/aggregator integration, by design (§16).
+- It **never** holds a credential that could move money.
+- It **never** pays a bill, transfers funds, or enforces a budget cap.
+- It **never** gives financial advice. The scam shield protects against *fraud*;
+  it does not tell him what to do with his money (§17).
+- It **never** judges his spending or imposes friction on it (§18, §23).
+- It **never** shows his money to anyone but him (§19).
+
+Every money feature is **manual-entry and informational.** Banking integration is
+deliberately deferred — not because it's hard, but because handling someone's
+financial data carries real risk we will not take on during early development.
+That deferral is a design choice, documented as such, not an oversight or a TODO.
+
+If a future contributor proposes letting the agent "just pay the bill for him" or
+"link his account so he doesn't have to type," the answer is no, and this section
+is why.
+
+---
+
 ## What is deliberately NOT built (and never will be without re-opening this design)
 
 These are not "v1 cut for time." They are **excluded by design.** Building any of
@@ -142,15 +213,25 @@ them requires re-opening this document and the conversation behind it.
 - ❌ **Location tracking.**
 - ❌ **Automatic mood / emotion detection.**
 - ❌ **Social features** or sharing to social media.
-- ❌ **Money-management features** — deferred; too high-stakes for this timeline.
 - ❌ **Time-shaming language** — "you've been away for 14 minutes."
 - ❌ **Auto-advance, auto-detect-stuck, or auto-escalate logic** — every step
   transition is an explicit tap.
 - ❌ **Crisis hotlines as a runtime path** — he routes to his sibling only, on
   his own initiative (see above).
-- ❌ **Audio recording of any kind** — voice samples for the writing-style
-  features are *text only* (pasted writing he already produced). Recording audio
-  would violate §4, §5, §8, and §12 at once.
+- ❌ **Audio recording of any kind** — would violate §4, §5, §8, and §12 at once.
+
+### On money, specifically (see [The money boundary](#the-money-boundary))
+
+- ❌ **Banking integration** (Plaid, Yodlee, or any account aggregator) —
+  handling financial data carries real risk we will not take on in early
+  development. Manual entry only. This is a design choice, not an oversight.
+- ❌ **Auto-pay or money transfers** — the agent never moves money (§16).
+- ❌ **Spending caps or budget enforcement** — no paternalism on his spending
+  (§18).
+- ❌ **Financial advice of any kind** — investment, credit, tax, budgeting. Scam
+  analysis is fraud protection, not advice (§17).
+- ❌ **Spending visibility to anyone but the user** — not the sibling, not
+  parents, not an aggregated view (§19).
 
 ---
 

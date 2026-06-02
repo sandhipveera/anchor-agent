@@ -1,6 +1,7 @@
 # Spike: Silent + Haptic Web Push on Android PWA
 
-**Status:** awaiting results on a real Android device.
+**Status:** ✅ resolved (2026-06-01). Verdict: **needs TWA** (fallback b) — a plain
+PWA cannot deliver reliable soundless+haptic background push. See the [report](#report) below.
 **Why this exists:** "Silent by default, haptic-first" (DESIGN_PRINCIPLES §4, §5)
 is load-bearing. If a background push can't be reliably soundless *and* haptic on
 an Android PWA, the product changes shape. We validate this **before** building
@@ -86,32 +87,67 @@ channel** settings (Chrome site notifications) changed the result.
 
 ## Report
 
-> Fill this in after running on the device. This drives the go/no-go on PWA vs.
-> TWA, and whether haptics are foreground-only.
+Run on a real Android device. This drives the go/no-go on PWA vs. TWA, and
+whether haptics are foreground-only.
 
-**Device / OS / Chrome version:**
-**Date tested:**
+**Device / OS / Chrome version:** Android 10, Chrome 147 (mobile). Model masked as
+"K" by Chrome's reduced UA. Push endpoint: FCM. **`installedStandalone: true`** —
+background tests ran as an installed home-screen PWA, so the result is valid for
+the real deployment case, not just a browser tab.
+**Date tested:** 2026-06-01
 
 | # | Test | Vibrated? | Sound? | App state | Notes |
 |---|------|-----------|--------|-----------|-------|
-| 1 | Foreground `navigator.vibrate()` | | n/a | foreground | |
-| 2 | Local SILENT+vibrate (step 3) | | | foreground | |
-| 3 | Local SILENT+vibrate (step 3) | | | backgrounded | |
-| 4 | Background push, silent (`send.js`) | | | locked | |
-| 5 | Background push, control (`--sound`) | | | locked | |
-| 6 | Repeat #4 after 10+ min idle | | | locked | reliability check |
+| 1 | Foreground `navigator.vibrate()` | ✅ yes | n/a | foreground | Vibration API works in foreground. |
+| 2 | Local SILENT+vibrate (step 3) | ✅ yes | no (silent) | foreground | Foreground SW `showNotification` honored `vibrate`. |
+| 3 | Local SILENT+vibrate (step 3) | — | — | backgrounded | Not separately tested; superseded by the real push tests below. |
+| 4 | Background push, silent (`send.js`) | ❌ no | ❌ no | locked | **Nothing appeared at all.** `silent:true` suppressed the entire notification, vibration included. |
+| 5 | Background push, control (`--sound`) | ❌ no* | ✅ yes | locked | *One vibration on the very first send (before the delivery path settled); never reproduced. After harness fix (unique tag + `urgency:high`): reliable **sound, no vibration** across repeats. |
+| 6 | Repeat #5, identical sends | ❌ no | ✅ yes | locked | Reliability check: background haptic never fired again. Sound consistent; vibration absent. |
 
-**Did the OS notification channel override `silent`/`vibrate`?**
+**Harness confounds found and fixed mid-spike:** (1) all pushes shared one `tag`
+with `renotify:false`, so repeats silently *replaced* the prior notification
+without re-alerting — masquerading as "no haptic." Fixed with a unique tag per
+send. (2) `web-push` defaults to normal priority, which Android **Doze** defers
+on a locked device. Fixed with `urgency:'high'`. After both fixes, sound became
+reliable and the *absence* of background vibration was confirmed as real, not an
+artifact.
+
+**Did the OS notification channel override `silent`/`vibrate`?** Yes. On Android
+8+, a web notification's vibration is governed by Chrome's per-site **notification
+channel**, not the `vibrate` array we send. We cannot set or guarantee it from
+web code. `silent:true` maps to a fully-silent (no-vibrate) behavior; `silent:false`
+let sound through but did **not** make the channel vibrate for background pushes.
 
 **Could the user reach a soundless+haptic state without per-notification fiddling?**
+Not deterministically, and not from our code. The one configuration that vibrated
+also wasn't reproducible, and the reproducible one made sound. There is no
+web-controllable path to "reliably soundless **and** reliably haptic" in the
+background on this device.
 
 ### Verdict
 
 - [ ] **PWA viable** — silent + haptic works reliably in background. Proceed with PWA.
 - [ ] **Foreground-only haptics** — design interaction patterns around it (fallback a).
-- [ ] **Needs TWA** — wrap as Trusted Web Activity for native channel control (fallback b).
+- [x] **Needs TWA** — wrap as Trusted Web Activity for native channel control (fallback b).
 
 ### Recommendation to the engineer
 
-_(one paragraph: what we learned, which fallback if any, and the impact on the
-build sequence.)_
+A plain Android PWA cannot deliver the product's load-bearing promise — *soundless
+by default, haptic-first* — for **background / locked** notifications. Foreground
+haptics work (`navigator.vibrate` and foreground `showNotification` both buzz), but
+every background path fails the requirement: `silent:true` suppresses the whole
+notification (no haptic), and `silent:false` produces sound while the vibration is
+left to Chrome's notification channel, which did not fire haptics for background
+pushes and is not controllable from web code. Because background haptic reminders
+are core (bill reminders, sensory pre-warnings, "where was I" nudges), foreground-only
+haptics (fallback a) would gut the product. **Proceed with fallback (b): an
+Android TWA** (Trusted Web Activity) with **notification delegation** to an
+app-defined notification channel (sound OFF, vibration ON), which gives deterministic
+soundless+haptic in the background. Impact on the build sequence: the PWA-vs-TWA gate
+in [ARCHITECTURE.md §11](../../../ARCHITECTURE.md#11-build-sequence-current) resolves
+to **TWA-wrapped PWA**; the web app, FastAPI backend, and Elastic/ADK work are
+otherwise unaffected and can now begin. One artifact-specific note: the TWA wrapper
+and its notification channel are the only net-new work this verdict adds; §8 of the
+architecture should be updated from "viability under validation" to this resolved
+decision.

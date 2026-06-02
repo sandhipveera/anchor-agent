@@ -1,0 +1,37 @@
+[
+  {
+    "name": "Phone",
+    "amount": 45.00,
+    "due_pattern": "monthly on the 5th",
+    "how_to_pay": "Carrier app, the blue one. Log in, tap Pay, use the saved card.",
+    "paused": false
+  },
+  {
+    "name": "Rent share",
+    "amount": 600.00,
+    "due_pattern": "monthly on the 1st",
+    "how_to_pay": "Bank app, send to the saved person named for rent. Type the amount, confirm.",
+    "paused": false
+  },
+  {
+    "name": "Internet",
+    "amount": 50.00,
+    "due_pattern": "monthly on the 15th",
+    "how_to_pay": "Provider website, Pay My Bill button. Saved card.",
+    "paused": false
+  },
+  {
+    "name": "Streaming",
+    "amount": 12.99,
+    "due_pattern": "monthly on the 20th",
+    "how_to_pay": "Charges the saved card automatically. Just check it went through.",
+    "paused": false
+  },
+  {
+    "name": "Renter insurance",
+    "amount": null,
+    "due_pattern": "monthly on the 28th",
+    "how_to_pay": "Insurance app. Amount varies; check the app for this month's number before paying.",
+    "paused": false
+  }
+]

@@ -20,17 +20,24 @@ webpush.setVapidDetails('mailto:spike@example.com', vapid.publicKey, vapid.priva
 
 const wantSound = process.argv.includes('--sound');
 
+// Unique tag per send: same tag + renotify:false silently REPLACES the prior
+// notification without re-vibrating, which masks repeat tests as "no haptic".
+// A fresh tag forces a new notification each time so we test the platform, not
+// the collapse behavior.
+const uniqueTag = 'anchor-spike-bg-' + Date.now();
+
 const payload = JSON.stringify({
   title: 'Anchor spike',
   body: wantSound ? 'Control push (sound allowed).' : 'Silent + haptic background push.',
-  tag: 'anchor-spike-bg',
+  tag: uniqueTag,
   silent: !wantSound,            // the property under test
   vibrate: [200, 100, 200],      // the haptic pattern under test
   requireInteraction: true,
 });
 
 try {
-  const res = await webpush.sendNotification(subscription, payload, { TTL: 60 });
+  // urgency:'high' so Android Doze does not defer/drop delivery while locked.
+  const res = await webpush.sendNotification(subscription, payload, { TTL: 60, urgency: 'high' });
   console.log('Push sent. HTTP', res.statusCode, '— now check the device.');
   console.log(wantSound ? 'Mode: WITH SOUND (control)' : 'Mode: SILENT + HAPTIC');
 } catch (err) {

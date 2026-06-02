@@ -1,0 +1,38 @@
+[
+  {
+    "type": "lifeline",
+    "content": "Hi. Do you have a few minutes to talk?",
+    "tags": ["check-in", "low-stakes"],
+    "source": "pre-written template"
+  },
+  {
+    "type": "lifeline",
+    "content": "I am having a hard time right now. Can you call me when you can?",
+    "tags": ["support", "callback"],
+    "source": "pre-written template"
+  },
+  {
+    "type": "lifeline",
+    "content": "Nothing urgent. I just wanted to say hi.",
+    "tags": ["connection", "low-stakes"],
+    "source": "pre-written template"
+  },
+  {
+    "type": "lifeline",
+    "content": "I got a message I think might be a scam. Can I check it with you?",
+    "tags": ["scam", "second-opinion"],
+    "source": "pre-written template"
+  },
+  {
+    "type": "lifeline",
+    "content": "Can you help me with something today? It is not an emergency.",
+    "tags": ["help", "non-urgent"],
+    "source": "pre-written template"
+  },
+  {
+    "type": "lifeline",
+    "content": "I am okay. I just need some quiet company for a bit.",
+    "tags": ["company", "regulation"],
+    "source": "pre-written template"
+  }
+]

@@ -1,0 +1,82 @@
+[
+  {
+    "type": "meal",
+    "name": "Air fryer chicken and potatoes",
+    "description": "Chicken pieces and cut potatoes in the air fryer. Season, set time, check once.",
+    "appliance_used": ["air fryer"],
+    "tags": ["protein", "warm", "low-effort", "one-appliance"],
+    "success_count": 6
+  },
+  {
+    "type": "meal",
+    "name": "Microwave oatmeal",
+    "description": "Oats and water in a bowl, microwave, stir, add toppings.",
+    "appliance_used": ["microwave"],
+    "tags": ["breakfast", "quick", "quiet", "one-appliance"],
+    "success_count": 12
+  },
+  {
+    "type": "meal",
+    "name": "Rice cooker rice and frozen vegetables",
+    "description": "Rice and water in the rice cooker; add frozen vegetables for the last part. No watching needed.",
+    "appliance_used": ["rice cooker"],
+    "tags": ["dinner", "hands-off", "quiet", "one-appliance"],
+    "success_count": 8
+  },
+  {
+    "type": "meal",
+    "name": "Instant pot lentil soup",
+    "description": "Lentils, broth, and vegetables in the instant pot. Set it and wait. Pressure release is a loud step.",
+    "appliance_used": ["instant pot"],
+    "tags": ["dinner", "warm", "batch", "loud-step:pressure-release"],
+    "success_count": 4
+  },
+  {
+    "type": "meal",
+    "name": "Toaster oven cheese toast",
+    "description": "Bread and cheese in the toaster oven until melted.",
+    "appliance_used": ["toaster oven"],
+    "tags": ["snack", "quick", "quiet", "one-appliance"],
+    "success_count": 9
+  },
+  {
+    "type": "meal",
+    "name": "Air fryer frozen dumplings",
+    "description": "Frozen dumplings in the air fryer. Shake once partway.",
+    "appliance_used": ["air fryer"],
+    "tags": ["dinner", "low-effort", "one-appliance"],
+    "success_count": 5
+  },
+  {
+    "type": "meal",
+    "name": "Kettle instant noodles",
+    "description": "Boil water in the kettle, pour over noodles, wait, eat.",
+    "appliance_used": ["kettle"],
+    "tags": ["quick", "warm", "one-appliance"],
+    "success_count": 14
+  },
+  {
+    "type": "meal",
+    "name": "Microwave scrambled eggs",
+    "description": "Beat eggs in a mug, microwave in short bursts, stir between.",
+    "appliance_used": ["microwave"],
+    "tags": ["breakfast", "protein", "quick", "one-appliance"],
+    "success_count": 7
+  },
+  {
+    "type": "meal",
+    "name": "Instant pot rice and beans",
+    "description": "Rice, beans, water, and seasoning in the instant pot. Pressure release is a loud step.",
+    "appliance_used": ["instant pot"],
+    "tags": ["dinner", "batch", "warm", "loud-step:pressure-release"],
+    "success_count": 3
+  },
+  {
+    "type": "meal",
+    "name": "Toaster oven roasted vegetables",
+    "description": "Cut vegetables with oil on the tray, toaster oven until soft.",
+    "appliance_used": ["toaster oven"],
+    "tags": ["side", "warm", "quiet", "one-appliance"],
+    "success_count": 5
+  }
+]

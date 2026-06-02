@@ -1,0 +1,62 @@
+[
+  {
+    "type": "scam",
+    "content": "Urgency and threats. A real company or agency gives you time. A message that says you must act in minutes or hours, or something bad will happen, is using pressure so you do not stop to think. Pressure is a red flag, not a deadline.",
+    "tags": ["urgency", "pressure", "threat"],
+    "source": "FTC consumer alerts"
+  },
+  {
+    "type": "scam",
+    "content": "Gift cards, wire transfers, or cryptocurrency as payment. No real government office, utility, or company will ask you to pay with gift cards, a wire transfer, or crypto. If someone asks for those, it is a scam. Stop.",
+    "tags": ["payment", "gift-card", "wire", "crypto"],
+    "source": "FTC consumer alerts"
+  },
+  {
+    "type": "scam",
+    "content": "A stranger who reached out first. If someone contacted you out of nowhere about a prize, a job, a refund, or a problem with an account, be careful. You did not start this. Scammers often start the contact.",
+    "tags": ["unsolicited", "prize", "refund", "first-contact"],
+    "source": "AARP Fraud Watch Network"
+  },
+  {
+    "type": "scam",
+    "content": "Asking you to keep it secret. A message that tells you not to tell family, a friend, or the bank is trying to stop the people who would warn you. Real businesses do not ask for secrecy. Telling someone you trust is allowed and smart.",
+    "tags": ["secrecy", "isolation", "manipulation"],
+    "source": "AARP Fraud Watch Network"
+  },
+  {
+    "type": "scam",
+    "content": "A link or number inside the message itself. Do not tap a link or call a number that the message gave you. If it claims to be your bank, open your bank app on your own, or use the number on your card. Use contact details you already had, not ones the message provided.",
+    "tags": ["phishing", "link", "phone-number", "verify-independently"],
+    "source": "FTC consumer alerts"
+  },
+  {
+    "type": "scam",
+    "content": "Pretending to be someone you trust. Some messages copy the name of a real company, a government office, or even a family member. The name being right does not mean the message is real. Check by contacting that person or company a different way.",
+    "tags": ["impersonation", "spoofing", "authority"],
+    "source": "FTC consumer alerts"
+  },
+  {
+    "type": "scam",
+    "content": "Too good to be true offers. A large prize you did not enter to win, a job that pays a lot for little work, or an investment that promises guaranteed high returns are common bait. If it sounds too good to be true, it usually is.",
+    "tags": ["prize", "job-scam", "investment", "too-good"],
+    "source": "AARP Fraud Watch Network"
+  },
+  {
+    "type": "scam",
+    "content": "Asking for personal details directly. A message that asks for your password, full card number, Social Security number, or one-time code is a red flag. Real companies do not ask for your password or one-time code. Never share a code someone asks you for.",
+    "tags": ["personal-info", "password", "otp", "social-security"],
+    "source": "FTC consumer alerts"
+  },
+  {
+    "type": "scam",
+    "content": "Literal-language scam note. Scam messages often use friendly or urgent tone, vague wording, or phrases meant to make you feel rushed, scared, or special. The feeling the message gives you is a clue: if it makes you feel pressured, afraid, or rushed, slow down and check before doing anything.",
+    "tags": ["tone", "manipulation", "slow-down", "autism-friendly"],
+    "source": "Autism-community scam-awareness reports"
+  },
+  {
+    "type": "scam",
+    "content": "It is always okay to not respond. You do not owe anyone a reply. Ignoring a suspicious message, hanging up, or closing it is a complete and correct response. You do not have to be polite to a possible scammer.",
+    "tags": ["no-reply", "permission", "autism-friendly", "boundaries"],
+    "source": "Autism-community scam-awareness reports"
+  }
+]
