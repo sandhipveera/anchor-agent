@@ -1,0 +1,12 @@
+# Keep the Cloud Build upload context small and secret-free.
+# (gcloud does not read the repo-root .gitignore for an upload rooted here.)
+.venv/
+venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+.env.*
+!.env.example
+seed/
+README.md

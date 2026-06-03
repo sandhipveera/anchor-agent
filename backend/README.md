@@ -5,7 +5,11 @@ Firestore + Elastic (see [ARCHITECTURE.md](../ARCHITECTURE.md)).
 
 ## Phase-0 surface
 
-- `GET /healthz` → `{"status": "ok", "service": "anchor"}`
+- `GET /healthz` **and** `GET /health` → `{"status": "ok", "service": "anchor"}`
+  - Same payload at both. `/healthz` follows the k8s convention and works
+    locally / behind a custom domain or load balancer. **On the bare `*.run.app`
+    URL, Google Front End reserves and intercepts `/healthz`** before it reaches
+    the container, so use **`/health`** there (the frontend does).
 - Security scaffolding wired from day one: identity-pinning middleware stub
   (`app/middleware.py`), PII-scrubbing + no-access-log logging
   (`app/logging_config.py`).

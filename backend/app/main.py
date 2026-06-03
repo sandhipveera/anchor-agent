@@ -30,7 +30,12 @@ app.add_middleware(
 )
 
 
+# Served at BOTH paths: `/healthz` follows the k8s convention and is reachable
+# locally / behind a custom domain or load balancer; `/health` is the path that
+# reaches the container on the bare *.run.app URL, because Google Front End
+# reserves and intercepts `/healthz` there. Content-free by design — safe to log.
 @app.get("/healthz")
+@app.get("/health")
 def healthz() -> dict[str, str]:
-    """Liveness probe. Content-free by design — safe to log."""
+    """Liveness probe."""
     return {"status": "ok", "service": settings.service_name}

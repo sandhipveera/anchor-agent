@@ -12,7 +12,8 @@ export default function App() {
 
   useEffect(() => {
     let cancelled = false
-    fetch(`${API_URL}/healthz`)
+    // /health (not /healthz): Google Front End reserves /healthz on *.run.app.
+    fetch(`${API_URL}/health`)
       .then(async (res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
         return res.json()
@@ -56,7 +57,7 @@ export default function App() {
           </div>
         )}
 
-        <p className="mt-5 break-all text-xs text-neutral-600">{API_URL}/healthz</p>
+        <p className="mt-5 break-all text-xs text-neutral-600">{API_URL}/health</p>
       </div>
     </main>
   )
