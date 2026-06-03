@@ -23,16 +23,36 @@ npm run build               # -> dist/
 npm run preview             # serve the production build
 ```
 
+## Deployment (Vercel)
+
+Hosted on Vercel (permanent, laptop-independent), pointed at the Cloud Run
+backend:
+
+- **Production URL:** https://anchor-agent-iota.vercel.app
+- Project `anchor-agent` (scope `sandhipveeras-projects`), framework preset Vite.
+- `VITE_API_URL` is set as a Vercel project env var (Production/Preview/Development)
+  → the Cloud Run backend. It is **not** read from a local `.env` in CI.
+- `vercel.json` sets the Vite preset and a no-cache header on `sw.js` so PWA
+  updates propagate.
+
+```bash
+cd frontend
+vercel --prod --yes        # redeploy production (CLI is already linked via .vercel/)
+```
+
+> The bare `anchor-agent.vercel.app` is taken by another account, and the
+> scope-suffixed domain is gated by Vercel Authentication — use the `-iota`
+> production domain, which is public and stable across deploys.
+
 ## Install on Android (verify on the spike device)
 
-The PWA needs **HTTPS** to install. Serve `dist/` (or the dev server) over a
-tunnel, open it in Chrome on the phone, then **menu → Add to Home screen**:
+Open **https://anchor-agent-iota.vercel.app** in Chrome on the phone, confirm the
+backend card shows *Connected*, then **menu → Add to Home screen**. For testing a
+local build before deploying, serve `dist/` over a tunnel instead:
 
 ```bash
 npm run build && npm run preview        # serves dist/ on :4173, host exposed
-# in another terminal:
-cloudflared tunnel --url http://localhost:4173
-# open the https URL on the phone, install, launch from the home screen
+cloudflared tunnel --url http://localhost:4173   # in another terminal
 ```
 
 Installability checklist (all satisfied here): served over HTTPS, web app
