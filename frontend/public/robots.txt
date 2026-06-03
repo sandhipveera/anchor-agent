@@ -1,0 +1,4 @@
+# Keep this assistive app out of search indexes — low-profile by design,
+# consistent with the inference-risk posture (ARCHITECTURE.md §7).
+User-agent: *
+Disallow: /
